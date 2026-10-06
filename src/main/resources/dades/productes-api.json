@@ -1,0 +1,7 @@
+{
+  "font": "API de proveïdors",
+  "productes": [
+    { "id": "P101", "nom": "Càmera web HD", "preu": 35.50, "etiquetes": ["usb", "streaming"] },
+    { "id": "P102", "nom": "Auriculars amb micròfon", "preu": 59.00, "etiquetes": [], "descatalogat": null }
+  ]
+}

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Catàleg de la botiga en línia Byte & Bit -->
+<cataleg botiga="Byte &amp; Bit" actualitzat="2026-09-15">
+    <producte id="P001" categoria="periferics">
+        <nom>Teclat mecànic</nom>
+        <preu moneda="EUR">49.90</preu>
+        <estoc>25</estoc>
+        <etiquetes>
+            <etiqueta>gaming</etiqueta>
+            <etiqueta>usb</etiqueta>
+        </etiquetes>
+        <descripcio><![CDATA[Teclat amb interruptors <blaus> i retroil·luminació RGB.]]></descripcio>
+    </producte>
+    <producte id="P002" categoria="periferics">
+        <nom>Ratolí sense fil</nom>
+        <preu moneda="EUR">19.95</preu>
+        <estoc>0</estoc>
+        <etiquetes>
+            <etiqueta>bluetooth</etiqueta>
+        </etiquetes>
+    </producte>
+    <producte id="P003" categoria="monitors">
+        <nom>Monitor 27 polzades</nom>
+        <preu moneda="EUR">229.00</preu>
+        <estoc>8</estoc>
+        <etiquetes>
+            <etiqueta>4k</etiqueta>
+            <etiqueta>hdmi</etiqueta>
+            <etiqueta>usb</etiqueta>
+        </etiquetes>
+        <descripcio>Panell IPS amb resolució 3840x2160.</descripcio>
+    </producte>
+    <!-- Producte en oferta: el preu ja inclou el descompte -->
+    <producte id="P004" categoria="emmagatzematge">
+        <nom>Disc SSD 1 TB</nom>
+        <preu moneda="EUR">74.50</preu>
+        <estoc>40</estoc>
+        <etiquetes/>
+    </producte>
+    <producte id="P005" categoria="monitors">
+        <nom>Monitor portàtil 15 polzades</nom>
+        <preu moneda="EUR">139.99</preu>
+        <estoc>0</estoc>
+        <etiquetes>
+            <etiqueta>usb</etiqueta>
+        </etiquetes>
+    </producte>
+    <producte id="P006" categoria="emmagatzematge">
+        <nom>Memòria USB 128 GB</nom>
+        <preu moneda="EUR">12.00</preu>
+        <estoc>120</estoc>
+        <etiquetes>
+            <etiqueta>usb</etiqueta>
+        </etiquetes>
+    </producte>
+</cataleg>

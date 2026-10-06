@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configuració de l'aplicació de la botiga -->
+<configuracio versio="2">
+    <aplicacio>
+        <nom>Botiga Byte &amp; Bit</nom>
+        <entorn>produccio</entorn>
+        <depuracio>false</depuracio>
+    </aplicacio>
+    <baseDades>
+        <url>jdbc:sqlite:botiga.db</url>
+        <usuari>botiga</usuari>
+        <connexionsMaximes>10</connexionsMaximes>
+        <tempsEspera unitat="s">30</tempsEspera>
+    </baseDades>
+    <correu activat="true">
+        <servidor>smtp.example.com</servidor>
+        <port>587</port>
+    </correu>
+    <idiomes>
+        <idioma predeterminat="true">ca</idioma>
+        <idioma>es</idioma>
+        <idioma>en</idioma>
+    </idiomes>
+</configuracio>

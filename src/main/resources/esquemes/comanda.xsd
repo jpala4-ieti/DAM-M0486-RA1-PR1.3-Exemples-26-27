@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Esquema d'una comanda de la botiga.
+    Defineix l'estructura (quins elements i en quin ordre) i els tipus de dades
+    (dates, enters positius, imports amb dos decimals, formats d'identificador...).
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xs:element name="comanda" type="TipusComanda"/>
+
+    <xs:complexType name="TipusComanda">
+        <xs:sequence>
+            <xs:element name="client" type="TipusClient"/>
+            <xs:element name="linies" type="TipusLinies"/>
+            <xs:element name="total" type="TipusTotal"/>
+            <xs:element name="observacions" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="TipusIdComanda" use="required"/>
+        <xs:attribute name="data" type="xs:date" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="TipusClient">
+        <xs:sequence>
+            <xs:element name="nom" type="xs:string"/>
+            <xs:element name="email" type="TipusEmail"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TipusLinies">
+        <xs:sequence>
+            <xs:element name="linia" type="TipusLinia" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TipusLinia">
+        <xs:attribute name="producte" type="TipusIdProducte" use="required"/>
+        <xs:attribute name="quantitat" type="xs:positiveInteger" use="required"/>
+        <xs:attribute name="preuUnitari" type="TipusImport" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="TipusTotal">
+        <xs:simpleContent>
+            <xs:extension base="TipusImport">
+                <xs:attribute name="moneda" type="xs:string" default="EUR"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="TipusIdComanda">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="C[0-9]{4}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TipusIdProducte">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="P[0-9]{3}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TipusEmail">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[^@\s]+@[^@\s]+\.[a-z]{2,}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TipusImport">
+        <xs:restriction base="xs:decimal">
+            <xs:minInclusive value="0"/>
+            <xs:fractionDigits value="2"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

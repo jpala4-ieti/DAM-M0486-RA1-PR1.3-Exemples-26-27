@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fac:factura xmlns:fac="https://exemple.cat/esquemes/factura"
+             xmlns:emp="https://exemple.cat/esquemes/empresa"
+             numero="F-2026-0042" data="2026-09-20">
+    <fac:emissor>
+        <emp:nom>Byte &amp; Bit SL</emp:nom>
+        <emp:nif>B12345678</emp:nif>
+    </fac:emissor>
+    <fac:receptor>
+        <emp:nom>Oficines Llevant SA</emp:nom>
+        <emp:nif>A87654321</emp:nif>
+    </fac:receptor>
+    <fac:linies>
+        <fac:linia producte="P003" quantitat="4" preuUnitari="229.00"/>
+        <fac:linia producte="P001" quantitat="4" preuUnitari="49.90"/>
+    </fac:linies>
+    <fac:impostos tipus="IVA" percentatge="21"/>
+    <!-- Un altre espai de noms (el predeterminat d'aquest element) amb un element que també es diu "nom" -->
+    <notes xmlns="https://exemple.cat/esquemes/notes">
+        <nom>Lliurament a recepció</nom>
+    </notes>
+</fac:factura>

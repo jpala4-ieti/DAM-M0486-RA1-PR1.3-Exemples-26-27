@@ -1,0 +1,37 @@
+# Integració contínua: a cada push i a cada pull request, GitHub compila el projecte,
+# executa tots els tests, comprova la cobertura mínima i desa el jar generat.
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descarregar el codi
+        uses: actions/checkout@v4
+
+      - name: Instal·lar el JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Compilar, executar els tests i generar el jar
+        run: mvn -B verify
+
+      - name: Desar el jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: dam-m0486-ra1-pr13-exemples
+          path: target/dam-m0486-ra1-pr13-exemples.jar
+
+      - name: Desar l'informe de cobertura
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: informe-cobertura
+          path: target/site/jacoco/

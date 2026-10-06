@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<comanda id="C12" data="2026-13-01">
+    <client>
+        <nom>Joan Vidal</nom>
+        <email>joan.vidal.example.com</email>
+    </client>
+    <linies>
+        <linia producte="P003" quantitat="0" preuUnitari="229.00"/>
+        <linia producte="P006" quantitat="2" preuUnitari="12.005"/>
+    </linies>
+</comanda>

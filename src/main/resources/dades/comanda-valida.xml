@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<comanda id="C1004" data="2026-09-18">
+    <client>
+        <nom>Núria Soler</nom>
+        <email>nuria.soler@example.com</email>
+    </client>
+    <linies>
+        <linia producte="P002" quantitat="2" preuUnitari="19.95"/>
+        <linia producte="P004" quantitat="1" preuUnitari="74.50"/>
+    </linies>
+    <total moneda="EUR">114.40</total>
+    <observacions>Deixar el paquet a consergeria.</observacions>
+</comanda>

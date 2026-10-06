@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    ============================================================================
+    pom.xml: Project Object Model
+    ============================================================================
+    Aquest fitxer descriu el projecte perquè Maven el pugui construir:
+      - qui és el projecte (coordenades: groupId, artifactId, version),
+      - de quines llibreries depèn (dependencies),
+      - com es compila, es prova i s'empaqueta (build/plugins).
+
+    Ordres principals (s'executen des de la carpeta on hi ha aquest fitxer):
+      mvn compile      compila el codi de src/main/java
+      mvn test         compila i executa els tests de src/test/java
+      mvn package      a més, genera el jar executable a target/
+      mvn verify       a més, genera l'informe de cobertura i comprova els mínims
+      mvn clean        esborra la carpeta target/
+
+    Cada ordre executa també totes les fases anteriors del cicle de vida:
+      validate → compile → test → package → verify → install
+    ============================================================================
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Versió del format del pom.xml. Amb Maven 3 sempre és 4.0.0 -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        Coordenades del projecte. Identifiquen l'artefacte de manera única dins d'un repositori Maven:
+          groupId    organització o projecte general (normalment, un domini al revés)
+          artifactId nom d'aquest mòdul; també dona nom al jar
+          version    versió actual del projecte
+          packaging  tipus d'artefacte que es genera (jar és el valor per defecte)
+    -->
+    <groupId>com.project</groupId>
+    <artifactId>dam-m0486-ra1-pr13-exemples</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <!-- Informació descriptiva: no afecta la construcció, però surt als informes i als repositoris -->
+    <name>DAM M0486 RA1 PR1.3 - Exemples de fitxers XML amb Java</name>
+    <description>
+        Exemples complets de tractament de fitxers XML amb Java (DOM, XPath, SAX, StAX, JAXB, XSD,
+        XSLT, JSON, espais de noms i seguretat) per al mòdul d'Accés a dades. Curs 2026-27.
+    </description>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+        </license>
+    </licenses>
+
+    <!--
+        ============================================================================
+        Propietats: valors que es reutilitzen a la resta del fitxer amb ${nom}
+        ============================================================================
+        Centralitzar les versions aquí fa que actualitzar una llibreria sigui canviar una sola línia.
+    -->
+    <properties>
+        <!-- Versió de Java: compila per a Java 21 i comprova que només es fa servir l'API de Java 21 -->
+        <maven.compiler.release>21</maven.compiler.release>
+
+        <!-- Codificació dels fitxers font i dels informes. Sense això, Maven fa servir la del sistema
+             (a Windows sovint no és UTF-8) i els accents es corrompen -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- Classe que s'executa amb java -jar -->
+        <main.class>com.project.exemples.Main</main.class>
+        <!-- Classe que executa mvn exec:java. Com que és una propietat, es pot canviar des de la
+             línia d'ordres amb -Dexec.mainClass=... sense tocar el pom -->
+        <exec.mainClass>${main.class}</exec.mainClass>
+
+        <!-- Versions de les llibreries -->
+        <jaxb-api.version>4.0.2</jaxb-api.version>
+        <jaxb-runtime.version>4.0.5</jaxb-runtime.version>
+        <jackson.version>2.19.2</jackson.version>
+        <junit.version>5.12.2</junit.version>
+
+        <!-- Cobertura mínima que exigeix mvn verify (0.85 = 85%) -->
+        <cobertura.linies.minima>0.85</cobertura.linies.minima>
+        <cobertura.branques.minima>0.80</cobertura.branques.minima>
+    </properties>
+
+    <!--
+        ============================================================================
+        Gestió de dependències: fixa versions, però NO afegeix cap llibreria al projecte
+        ============================================================================
+        Un BOM (Bill Of Materials) és un pom especial amb les versions de tota una família de
+        llibreries que funcionen bé juntes. En importar-lo, les dependències d'aquesta família ja
+        no necessiten indicar la versió.
+    -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!--
+        ============================================================================
+        Dependències: llibreries que necessita el projecte
+        ============================================================================
+        Maven les descarrega del repositori central (i les dependències d'aquestes, de manera
+        transitiva) i les desa a ~/.m2/repository. L'abast (scope) indica quan es fan servir:
+          compile  (per defecte) per compilar, per executar i dins del jar
+          runtime  només per executar: el codi no les fa servir directament
+          test     només per compilar i executar els tests; no van al jar
+
+        DOM, SAX, StAX, XPath, XSLT i la validació XSD formen part del JDK: no necessiten cap dependència.
+    -->
+    <dependencies>
+        <!-- JAXB (exemple 7). Des de Java 11 no és dins del JDK. L'API són les anotacions i les
+             interfícies (jakarta.xml.bind.*) que fa servir el nostre codi -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>${jaxb-api.version}</version>
+        </dependency>
+
+        <!-- Implementació de JAXB. El codi no la fa servir directament (per això té abast runtime):
+             l'API la troba en temps d'execució a través de META-INF/services -->
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>${jaxb-runtime.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Jackson (exemple 11): lectura i escriptura de JSON. La versió la fixa el BOM -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
+        <!-- Mòdul de Jackson per als tipus de java.time (LocalDate de les comandes) -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+
+        <!-- JUnit 5 (Jupiter): API per escriure els tests, tests parametritzats i motor d'execució -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!--
+        ============================================================================
+        Construcció
+        ============================================================================
+    -->
+    <build>
+        <!-- Nom del jar que es genera (sense la versió): target/dam-m0486-ra1-pr13-exemples.jar -->
+        <finalName>${project.artifactId}</finalName>
+
+        <!--
+            pluginManagement fixa la versió dels plugins que Maven fa servir per defecte.
+            Si no es fixa, cada versió de Maven en tria una de diferent i el projecte es pot
+            comportar diferent en cada ordinador. Fixar-les fa la construcció reproduïble.
+        -->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.4.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.3.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>3.1.3</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <!--
+                Enforcer: comprova els requisits de l'entorn abans de començar.
+                Si algú intenta compilar amb Java 17, rep un missatge clar en lloc d'errors estranys.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <id>requisits-de-l-entorn</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[21,)</version>
+                                    <message>Cal el JDK 21 o posterior.</message>
+                                </requireJavaVersion>
+                                <requireMavenVersion>
+                                    <version>[3.6.3,)</version>
+                                    <message>Cal Maven 3.6.3 o posterior.</message>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--
+                Compilador. La versió de Java la pren de la propietat maven.compiler.release.
+                -Xlint:all mostra tots els avisos del compilador (excepte serial, que aquí no aporta res):
+                és una bona manera d'aprendre a escriure codi net.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.0</version>
+                <configuration>
+                    <showWarnings>true</showWarnings>
+                    <compilerArgs>
+                        <arg>-Xlint:all,-serial,-processing</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
+            <!--
+                Surefire: executa els tests durant la fase test.
+                Busca automàticament les classes que acaben en Test dins de src/test/java.
+                El directori de treball dels tests és l'arrel del projecte.
+                No s'hi configura argLine perquè la fa servir JaCoCo per afegir el seu agent.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.3</version>
+            </plugin>
+
+            <!--
+                JaCoCo: mesura quina part del codi executen els tests (cobertura).
+                  prepare-agent  afegeix un agent a la JVM dels tests que registra les línies executades
+                  report         genera l'informe HTML a target/site/jacoco/index.html
+                  check          fa fallar mvn verify si la cobertura és inferior al mínim
+            -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.13</version>
+                <executions>
+                    <execution>
+                        <id>preparar-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>informe-de-cobertura</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>cobertura-minima</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <!-- BUNDLE: la regla s'aplica al projecte sencer -->
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <!-- Proporció de línies executades pels tests -->
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${cobertura.linies.minima}</minimum>
+                                        </limit>
+                                        <!-- Proporció de camins dels if i switch que s'han provat -->
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${cobertura.branques.minima}</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--
+                Jar: empaqueta les classes compilades i els recursos (src/main/resources).
+                Aquest jar només conté el codi del projecte, no les dependències.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>${main.class}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!--
+                Shade: converteix el jar anterior en un jar executable autònom ("fat jar"), que
+                inclou també les classes de les dependències (JAXB i Jackson). Així n'hi ha prou amb:
+                    java -jar target/dam-m0486-ra1-pr13-exemples.jar
+                El jar sense dependències es conserva com a target/original-dam-m0486-ra1-pr13-exemples.jar.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>jar-amb-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <!-- No cal generar el pom reduït que fa servir el plugin per defecte -->
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <transformers>
+                                <!-- Escriu el MANIFEST.MF amb la classe principal (Main-Class) -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>${main.class}</mainClass>
+                                    <manifestEntries>
+                                        <!-- Algunes dependències tenen classes específiques per a cada versió de Java -->
+                                        <Multi-Release>true</Multi-Release>
+                                    </manifestEntries>
+                                </transformer>
+                                <!-- Ajunta els fitxers META-INF/services de totes les dependències.
+                                     Imprescindible: JAXB troba la seva implementació a través d'aquests fitxers -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                            </transformers>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <!-- Descriptors de mòduls i signatures de les dependències: dins d'un
+                                             jar combinat no són vàlids i provocarien errors en arrencar -->
+                                        <exclude>module-info.class</exclude>
+                                        <exclude>META-INF/versions/*/module-info.class</exclude>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--
+                Exec: permet executar el programa sense generar el jar:
+                    mvn compile exec:java                                       (menú d'exemples)
+                    mvn compile exec:java -Dexec.args="4"                       (exemple 4)
+                    mvn compile exec:java -Dexec.mainClass=com.project.exemples.xpath.ConsultesXPath
+            -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.0</version>
+                <!-- La classe a executar surt de la propietat exec.mainClass -->
+            </plugin>
+        </plugins>
+    </build>
+</project>

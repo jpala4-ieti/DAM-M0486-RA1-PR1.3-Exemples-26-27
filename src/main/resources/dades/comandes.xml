@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<comandes>
+    <comanda id="C1001" data="2026-09-01">
+        <client>
+            <nom>Marta Puig</nom>
+            <email>marta.puig@example.com</email>
+        </client>
+        <linies>
+            <linia producte="P001" quantitat="1" preuUnitari="49.90"/>
+            <linia producte="P006" quantitat="3" preuUnitari="12.00"/>
+        </linies>
+    </comanda>
+    <comanda id="C1002" data="2026-09-03">
+        <client>
+            <nom>Pau Serra</nom>
+            <email>pau.serra@example.com</email>
+        </client>
+        <linies>
+            <linia producte="P003" quantitat="2" preuUnitari="229.00"/>
+        </linies>
+    </comanda>
+    <comanda id="C1003" data="2026-09-10">
+        <client>
+            <nom>Marta Puig</nom>
+            <email>marta.puig@example.com</email>
+        </client>
+        <linies>
+            <linia producte="P004" quantitat="1" preuUnitari="74.50"/>
+        </linies>
+    </comanda>
+</comandes>
